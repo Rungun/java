@@ -12,11 +12,11 @@ public class Main {
             System.out.println("Не указан путь к файлу");
             return;
         }
-        ArrayList<Float> list1 = getListInterval(args[0],"\\cash1.txt");
-        ArrayList<Float> list2 = getListInterval(args[0],"\\cash2.txt.");
-        ArrayList<Float> list3 = getListInterval(args[0],"\\cash3.txt");
-        ArrayList<Float> list4 = getListInterval(args[0],"\\cash4.txt");
-        ArrayList<Float> list5 = getListInterval(args[0],"\\cash5.txt");
+        ArrayList<Float> list1 = getListInterval(args[0],"\\Cash1.txt");
+        ArrayList<Float> list2 = getListInterval(args[0],"\\Cash2.txt");
+        ArrayList<Float> list3 = getListInterval(args[0],"\\Cash3.txt");
+        ArrayList<Float> list4 = getListInterval(args[0],"\\Cash4.txt");
+        ArrayList<Float> list5 = getListInterval(args[0],"\\Cash5.txt");
 
         ArrayList<Float> sumList = getSumLengthQueue(list1,list2,list3,list4,list5);
         maxPeopleInterval(sumList);
