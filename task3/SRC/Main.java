@@ -3,60 +3,37 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 public class Main {
 
     public static void main(String[] args) {
-
-        if (args.length ==0){
-            System.out.println("Не указан путь к файлу");
-            return;
-        }
-        ArrayList<Float> list1 = getListInterval(args[0],"\\Cash1.txt");
-        ArrayList<Float> list2 = getListInterval(args[0],"\\Cash2.txt");
-        ArrayList<Float> list3 = getListInterval(args[0],"\\Cash3.txt");
-        ArrayList<Float> list4 = getListInterval(args[0],"\\Cash4.txt");
-        ArrayList<Float> list5 = getListInterval(args[0],"\\Cash5.txt");
-
-        ArrayList<Float> sumList = getSumLengthQueue(list1,list2,list3,list4,list5);
-        maxPeopleInterval(sumList);
-
+        ArrayList<Visitor> visitors =  getListVisit(args[0]);
+        ArrayList<PeriodVisit> periodVisit = getListPeriodVisit((short) 8,(short) 20);
+        PeriodVisit.getMaxPeriodVisit(periodVisit,visitors);
     }
-    public static void maxPeopleInterval(ArrayList<Float> listLengthQueue){
-        int maxInterval = 0;
-        for (int i = 1; i <listLengthQueue.size() ; i++) {
-            if (listLengthQueue.get(i)> listLengthQueue.get(maxInterval)){
-                maxInterval = i;
+
+
+    public static ArrayList<PeriodVisit> getListPeriodVisit(short start, short end){
+        short period = (short) (end - start);
+        short countMinute = (short) (period*60);
+        ArrayList<PeriodVisit> periodVisit = new ArrayList<>(1000);
+        short minute = 0;
+        for (int i = 0; i < countMinute ; i++) {
+            if (i%60 == 0 && i!=0){
+                start  += 1;
+                minute = 0;
             }
+            periodVisit.add(i,new PeriodVisit(start, minute));
+            minute  +=1;
         }
-        maxInterval += 1;
-        System.out.println(maxInterval);
+        return periodVisit;
     }
 
 
-    public static ArrayList<Float> getSumLengthQueue(ArrayList<Float>...arrayLists){
-
-        ArrayList<Float> sumLengthQueue = new ArrayList<>(100);
-        for (int i = 0; i <arrayLists[0].size() ; i++) {
-            sumLengthQueue.add(i,arrayLists[0].get(i));
-        }
-        for (int i = 1; i <arrayLists.length ; i++) {
-            for (int j = 0; j < arrayLists[i].size() ; j++) {
-                ArrayList<Float> listLenItv = arrayLists[i];
-                Float sumNumber = sumLengthQueue.get(j) + listLenItv.get(j);
-                sumLengthQueue.set(j,sumNumber);
-
-            }
-        }
-        return sumLengthQueue;
-    }
-
-    public static ArrayList<Float> getListInterval(String filePath, String fileName){
+    public static ArrayList<Visitor> getListVisit(String filePath){
         StringBuilder strBuild = new StringBuilder();
 
         try{
-            String fullPath = filePath + fileName;
-            FileReader reader  = new FileReader(fullPath);
+            FileReader reader  = new FileReader(filePath);
             BufferedReader bufferedReader = new BufferedReader(reader);
             String bufReader = bufferedReader.readLine();
             while (bufReader != null){
@@ -70,12 +47,10 @@ public class Main {
         }
         String data = strBuild.toString();
         String[] arrayData = data.split("\\\\[n]");
-        ArrayList<Float> listInterval = new ArrayList<>(20);
+        ArrayList<Visitor> listVisitor = new ArrayList<>(100);
         for (int i = 0; i <arrayData.length ; i++) {
-            Float number = Float.parseFloat(arrayData[i]);
-            listInterval.add(i,number);
+            listVisitor.add(new Visitor(arrayData[i]));
         }
-        return listInterval;
-
+        return listVisitor;
     }
 }
